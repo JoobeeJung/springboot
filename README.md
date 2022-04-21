@@ -176,7 +176,7 @@ dependencies {
 
 ```
 
-### 1. SpringBoot 자동설정 <br>
+### 1. SpringBoot 자동설정 (Application.java) <br>
 Path : /src/main/java/com/kbstar/springboot/study/Application 
 <br> 여기서 부터 설정을 읽는다.
 <br> 항상 프로젝트의 최상단에 위치
@@ -194,13 +194,36 @@ Path : /src/main/java/com/kbstar/springboot/study/Application
 ```
 
 
-### 2. 설정 바꾸기
+### 2. 설정 바꾸기 (Application.java)
  File -> Setting -> Editor -> General -> Code Completion -> Match case 해제
  -> Apply (자동완성 대소문자 구분 하지 않기 위함) <br>
  JSP : MVC Model
       Model, View, Controller
 
+### 3. 
+
+
 ```java
+package com.kbstar.springboot.study.web;
+
+import com.kbstar.springboot.study.web.HelloController;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+
+// 03. 아래 import는 처음 한번 직접 타이핑(Alt-Enter)에서 없는 녀석
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers= HelloController.class)
 public class HelloControllerTest {
@@ -238,6 +261,23 @@ public class HelloControllerTest {
     }
 
 }
+
+/*
+전체구조는 main쪽의 구조와 같아야 한다.
+
+@ExtendWith , 이전에는 @RunWith
+@WebMvcTest
+    @Controller
+@Autowired 자동주입
+    field, constructor, setter
+
+04. Lombok 설치
+앞으로 할 일( Lombok  : 생성자, getter/setter를 자동으로 처리)
+
+Ctrl+Shift+A
+plugins => Lombok 설치 확인
+build.gradle에 추가
+ */
 
 ```
 
@@ -334,6 +374,7 @@ HTTP Error Code
     스프링 부트 : POST(insert), PUT(update)을 구분
     cf. DELETE (삭제)
     
+    // http://localhost:8080/hello/dto/?name=홍길동&age=78
     
 @RestController
 public class HelloController {
@@ -358,6 +399,30 @@ public class HelloController {
 
 ```
   
+### 11. JPA
+
+    Java Persistence API : 자바 지속성 API
+    클래스 <-> DB 자동 Mapping
+    기존 방식 : 프로그래밍의 대부분이 Query
+    ORM(Object Relational Mapping)
+    ==> SQL의 종속성에서 벗어나게 하겠다.
+
+    CRUD ( Create, Read,  Update, Delete)
+        조회 : Member member = jpa.find(memberId)
+    JPA를 사용할 때의 장점 : 수정이 매우 간단하다.(유지보수)
+        객체(Class)가 변경되면 , 알아서 DB에 Update Query 날라간다.
+
+    +--------------------------+
+    |  Java Application        |
+    |  +--------------------+  |
+    |  | JPA                |  |
+    |  |  +--------------+  |  |           +----------+
+    |  |  |   JDBC API   |- |- |----SQL--->|   DB     |
+    |  |  |              |<-|- |---------- |          |
+    |  |  +--------------+  |  |           + ---------+
+    |  +--------------------+  |
+    +-------------------------+
+
 
 
 ### 13. 게시글 관련 클래스 정의
