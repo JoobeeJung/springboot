@@ -126,7 +126,7 @@
 
 ```
 ### 0. build.gradle 설정
-```
+```gradle
 plugins {
     id 'org.springframework.boot' version '2.4.1'
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'
