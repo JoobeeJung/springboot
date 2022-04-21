@@ -196,7 +196,7 @@ Path : /src/main/java/com/kbstar/springboot/study/Application
 
 ### 2. 설정 바꾸기
  File -> Setting -> Editor -> General -> Code Completion -> Match case 해제
- -> Apply <br>
+ -> Apply (자동완성 대소문자 구분 하지 않기 위함) <br>
  JSP : MVC Model
       Model, View, Controller
 
