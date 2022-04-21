@@ -1,4 +1,4 @@
-#SpringBoot
+# SpringBoot
 ### 1. SpringBoot 자동설정 <br>
 Path : /src/main/java/com/kbstar/springboot/study/Application 
 <br> 여기서 부터 설정을 읽는다.
