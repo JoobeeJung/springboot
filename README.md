@@ -1,4 +1,129 @@
 # SpringBoot
+.
+├── README.md
+├── build
+│   ├── classes
+│   │   └── java
+│   │       ├── main
+│   │       │   └── com
+│   │       │       └── kbstar
+│   │       │           └── springboot
+│   │       │               └── study
+│   │       │                   ├── Application.class
+│   │       │                   ├── domain
+│   │       │                   │   └── posts
+│   │       │                   │       ├── Posts$PostsBuilder.class
+│   │       │                   │       ├── Posts.class
+│   │       │                   │       └── PostsRepository.class
+│   │       │                   ├── service
+│   │       │                   │   └── PostsService.class
+│   │       │                   └── web
+│   │       │                       ├── HelloController.class
+│   │       │                       └── dto
+│   │       │                           ├── HelloResponseDto.class
+│   │       │                           ├── PostsSaveRequestDto$PostsSaveRequestDtoBuilder.class
+│   │       │                           └── PostsSaveRequestDto.class
+│   │       └── test
+│   │           ├── Application.class
+│   │           └── com
+│   │               └── kbstar
+│   │                   └── springboot
+│   │                       └── study
+│   │                           ├── domain
+│   │                           │   └── posts
+│   │                           │       ├── PostRepositoryTest.class
+│   │                           │       └── PostsRepositoryTest.class
+│   │                           └── web
+│   │                               ├── HelloControllerTest.class
+│   │                               └── dto
+│   │                                   └── HelloResponseDtoTest.class
+│   ├── generated
+│   │   └── sources
+│   │       ├── annotationProcessor
+│   │       │   └── java
+│   │       │       ├── main
+│   │       │       └── test
+│   │       └── headers
+│   │           └── java
+│   │               ├── main
+│   │               └── test
+│   ├── reports
+│   │   └── tests
+│   │       └── test
+│   │           ├── classes
+│   │           │   └── com.kbstar.springboot.study.domain.posts.PostsRepositoryTest.html
+│   │           ├── css
+│   │           │   ├── base-style.css
+│   │           │   └── style.css
+│   │           ├── index.html
+│   │           ├── js
+│   │           │   └── report.js
+│   │           └── packages
+│   │               └── com.kbstar.springboot.study.domain.posts.html
+│   ├── resources
+│   │   └── main
+│   │       └── application.properties
+│   ├── test-results
+│   │   └── test
+│   │       ├── TEST-com.kbstar.springboot.study.domain.posts.PostsRepositoryTest.xml
+│   │       └── binary
+│   │           ├── output.bin
+│   │           ├── output.bin.idx
+│   │           └── results.bin
+│   └── tmp
+│       ├── compileJava
+│       │   └── previous-compilation-data.bin
+│       ├── compileTestJava
+│       │   └── previous-compilation-data.bin
+│       └── test
+├── build.gradle
+├── gradle
+│   └── wrapper
+│       ├── gradle-wrapper.jar
+│       └── gradle-wrapper.properties
+├── gradlew
+├── gradlew.bat
+├── settings.gradle
+└── src
+    ├── main
+    │   ├── java
+    │   │   └── com
+    │   │       └── kbstar
+    │   │           └── springboot
+    │   │               └── study
+    │   │                   ├── Application.java
+    │   │                   ├── domain
+    │   │                   │   └── posts
+    │   │                   │       ├── Posts.java
+    │   │                   │       └── PostsRepository.java
+    │   │                   ├── service
+    │   │                   │   └── PostsService.java
+    │   │                   └── web
+    │   │                       ├── HelloController.java
+    │   │                       ├── PostsApiController.java
+    │   │                       └── dto
+    │   │                           ├── HelloResponseDto.java
+    │   │                           └── PostsSaveRequestDto.java
+    │   └── resources
+    │       └── application.properties
+    └── test
+        └── java
+            ├── Application.java
+            └── com
+                └── kbstar
+                    └── springboot
+                        └── study
+                            ├── domain
+                            │   └── posts
+                            │       ├── PostRepositoryTest.java
+                            │       └── PostsRepositoryTest.java
+                            └── web
+                                ├── HelloControllerTest.java
+                                └── dto
+                                    └── HelloResponseDtoTest.java
+
+
+
 ### 1. SpringBoot 자동설정 <br>
 Path : /src/main/java/com/kbstar/springboot/study/Application 
 <br> 여기서 부터 설정을 읽는다.
