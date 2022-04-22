@@ -489,8 +489,7 @@ public class HelloController {
     Application.java를 실행하여 아래 url를 통해 동작하는 지 확인한다.
     http://localhost:8080/hello/dto?name=홍길동&age=12
     http://localhost:8080/hello/dto/?name=홍길동&age=12
-   ![img.png](img.png)  
-
+ <img width="464" alt="image" src="https://user-images.githubusercontent.com/49167217/164649597-f6a637ca-190c-40ab-ae18-f1e94687e954.png">
 ---------
 
 ## DB SELECT
