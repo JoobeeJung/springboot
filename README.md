@@ -1072,5 +1072,6 @@ public class PostsResponseDto {
     http://localhost:8080/h2-console/
     h2콘솔에 접근하여 데이터를 확인할 수 있다.
     이떄 JDBC url은 jdbc:h2:mem:testdb 로 설정한다.
-    <img width="518" alt="image" src="https://user-images.githubusercontent.com/49167217/164693984-45abaf34-fa0e-4759-81bd-dfb4af4630a2.png">
+
+<img width="502" alt="image" src="https://user-images.githubusercontent.com/49167217/164694724-a422097a-a643-4b60-a673-180aa666103b.png">
 
