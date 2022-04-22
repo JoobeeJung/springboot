@@ -52,4 +52,18 @@ public class Posts {
         this.content = content;
         this.author = author;
     }
+
+    /*
+    24. 데이터 지속성(Consistent : 객체와 Entity의 일치)
+        객체가 업데이트 되면 자동으로 DB데이터가 변경
+
+        실제 DB에 업데이트되도록 만들기.
+        DTO 작업끝났다. ----> Service로 가서 작업
+     */
+
+    public void update(String title, String content)
+    {
+        this.title = title;
+        this.content = content;
+    }
 }

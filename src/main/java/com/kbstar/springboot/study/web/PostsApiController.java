@@ -1,10 +1,11 @@
 package com.kbstar.springboot.study.web;
 
 import com.kbstar.springboot.study.service.PostsService;
+import com.kbstar.springboot.study.web.dto.PostsResponseDto;
 import com.kbstar.springboot.study.web.dto.PostsSaveRequestDto;
+import com.kbstar.springboot.study.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /*
     20. 작업순서
@@ -37,9 +38,30 @@ public class PostsApiController {
     private final PostsService postsService;
 
     @PostMapping("/api/v1/posts")
-    public Long save(PostsSaveRequestDto requestDto)
+    public Long save(@RequestBody PostsSaveRequestDto requestDto)
     {
         System.out.println("-------------- Controller -> Service");
+        System.out.println("requestDto.title = " + requestDto.getTitle());
         return postsService.save(requestDto);
     }
+
+    /*
+    26 수정을 위한 REST 등록
+    Method : POST, PUT(0), GET, DELETE
+
+    DTO -> Service -> Controller -> 단위테스트
+     */
+
+    @PutMapping("/api/v1/posts/{id}")
+    public Long update(@PathVariable Long id,
+                       @RequestBody PostsUpdateRequestDto requestDto)
+    {
+        return postsService.update(id, requestDto);
+    }
+    @GetMapping("/api/v1/posts/{id}")
+    public PostsResponseDto findById(@PathVariable Long id)
+    {
+        return postsService.findById(id);
+    }
+
 }

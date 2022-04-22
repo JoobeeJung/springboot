@@ -1,8 +1,199 @@
-#SpringBoot
-### 1. SpringBoot 자동설정 <br>
-Path : /src/main/java/com/kbstar/springboot/study/Application 
-<br> 여기서 부터 설정을 읽는다.
-<br> 항상 프로젝트의 최상단에 위치
+# SpringBoot
+```text
+
+├── README.md
+├── build
+│   ├── classes
+│   │   └── java
+│   │       ├── main
+│   │       │   └── com
+│   │       │       └── kbstar
+│   │       │           └── springboot
+│   │       │               └── study
+│   │       │                   ├── Application.class
+│   │       │                   ├── domain
+│   │       │                   │   └── posts
+│   │       │                   │       ├── Posts$PostsBuilder.class
+│   │       │                   │       ├── Posts.class
+│   │       │                   │       └── PostsRepository.class
+│   │       │                   ├── service
+│   │       │                   │   └── PostsService.class
+│   │       │                   └── web
+│   │       │                       ├── HelloController.class
+│   │       │                       └── dto
+│   │       │                           ├── HelloResponseDto.class
+│   │       │                           ├── PostsSaveRequestDto$PostsSaveRequestDtoBuilder.class
+│   │       │                           └── PostsSaveRequestDto.class
+│   │       └── test
+│   │           ├── Application.class
+│   │           └── com
+│   │               └── kbstar
+│   │                   └── springboot
+│   │                       └── study
+│   │                           ├── domain
+│   │                           │   └── posts
+│   │                           │       ├── PostRepositoryTest.class
+│   │                           │       └── PostsRepositoryTest.class
+│   │                           └── web
+│   │                               ├── HelloControllerTest.class
+│   │                               └── dto
+│   │                                   └── HelloResponseDtoTest.class
+│   ├── generated
+│   │   └── sources
+│   │       ├── annotationProcessor
+│   │       │   └── java
+│   │       │       ├── main
+│   │       │       └── test
+│   │       └── headers
+│   │           └── java
+│   │               ├── main
+│   │               └── test
+│   ├── reports
+│   │   └── tests
+│   │       └── test
+│   │           ├── classes
+│   │           │   └── com.kbstar.springboot.study.domain.posts.PostsRepositoryTest.html
+│   │           ├── css
+│   │           │   ├── base-style.css
+│   │           │   └── style.css
+│   │           ├── index.html
+│   │           ├── js
+│   │           │   └── report.js
+│   │           └── packages
+│   │               └── com.kbstar.springboot.study.domain.posts.html
+│   ├── resources
+│   │   └── main
+│   │       └── application.properties
+│   ├── test-results
+│   │   └── test
+│   │       ├── TEST-com.kbstar.springboot.study.domain.posts.PostsRepositoryTest.xml
+│   │       └── binary
+│   │           ├── output.bin
+│   │           ├── output.bin.idx
+│   │           └── results.bin
+│   └── tmp
+│       ├── compileJava
+│       │   └── previous-compilation-data.bin
+│       ├── compileTestJava
+│       │   └── previous-compilation-data.bin
+│       └── test
+├── build.gradle
+├── gradle
+│   └── wrapper
+│       ├── gradle-wrapper.jar
+│       └── gradle-wrapper.properties
+├── gradlew
+├── gradlew.bat
+├── settings.gradle
+└── src
+    ├── main
+    │   ├── java
+    │   │   └── com
+    │   │       └── kbstar
+    │   │           └── springboot
+    │   │               └── study
+    │   │                   ├── Application.java
+    │   │                   ├── domain
+    │   │                   │   └── posts
+    │   │                   │       ├── Posts.java
+    │   │                   │       └── PostsRepository.java
+    │   │                   ├── service
+    │   │                   │   └── PostsService.java
+    │   │                   └── web
+    │   │                       ├── HelloController.java
+    │   │                       ├── PostsApiController.java
+    │   │                       └── dto
+    │   │                           ├── HelloResponseDto.java
+    │   │                           └── PostsSaveRequestDto.java
+    │   └── resources
+    │       └── application.properties
+    └── test
+        └── java
+            ├── Application.java
+            └── com
+                └── kbstar
+                    └── springboot
+                        └── study
+                            ├── domain
+                            │   └── posts
+                            │       ├── PostRepositoryTest.java
+                            │       └── PostsRepositoryTest.java
+                            └── web
+                                ├── HelloControllerTest.java
+                                └── dto
+                                    └── HelloResponseDtoTest.java
+
+
+```
+## SpringBoot 구조 개괄
+         +-----------------------+   +-----------+
+         |    Web Layer          |   |           |
+         |   (controllers) (3)   |   |   DTO(1)  |
+         +-----------------------+   |           |
+         +-----------------------+   |           |
+         |    Service Layer(2)   |   +-----------+
+         |                       |   +-----------+
+         +-----------------------+   |  Domain   |
+         +-----------------------+   |  Model    |
+         |    Repository Layer   |   | (Entity)  |
+         |                       |   |  Posts    |
+         +-----------------------+   +-----------+
+
+### 0. build.gradle 설정
+```gradle
+plugins {
+    id 'org.springframework.boot' version '2.4.1'
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+    id 'java'
+}
+
+group 'com.kbstar'
+version '1.0.4-SNAPSHOT-' + new Date().format("yyyyMMddHHmmss")
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+test {
+    useJUnitPlatform()
+}
+
+dependencies {
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation('org.springframework.boot:spring-boot-starter-mustache')
+
+    // 04-1 Lombok
+    // 추가후 Ctrl+Shift+O
+    implementation('org.projectlombok:lombok')
+
+    // 07 getter가 정상적으로 동작하기 위해 추가
+    // 뭔가가 변경되면 항상 새로고침(Sync)
+    // HelloResponseDtoTest 단위테스트
+    annotationProcessor('org.projectlombok:lombok')
+    testImplementation('org.projectlombok:lombok')
+    testAnnotationProcessor('org.projectlombok:lombok')
+
+    // 12. JPA : use in-memory databse H2DB ==> Sync
+    implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+    implementation('com.h2database:h2')
+
+    testImplementation ('org.springframework.boot:spring-boot-starter-test')
+
+    //04-1 lombok
+    implementation('org.projectlombok:lombok')
+
+    implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+    implementation('com.h2database:h2')
+}
+
+```
+
+### 1. SpringBoot 자동설정 (Application.java) <br>
+    Path : /src/main/java/com/kbstar/springboot/study/Application
+    <br> 여기서 부터 설정을 읽는다.
+    <br> 항상 프로젝트의 최상단에 위치
 
 ```java
 @SpringBootApplication
@@ -17,13 +208,35 @@ Path : /src/main/java/com/kbstar/springboot/study/Application
 ```
 
 
-### 2. 설정 바꾸기
- File -> Setting -> Editor -> General -> Code Completion -> Match case 해제
- -> Apply <br>
- JSP : MVC Model
-      Model, View, Controller
+### 2. 설정 바꾸기 (Application.java)
+    File -> Setting -> Editor -> General -> Code Completion -> Match case 해제
+    -> Apply (자동완성 대소문자 구분 하지 않기 위함) <br>
+    JSP : MVC Model
+    Model, View, Controller
+
+### 3. 수기 import (HelloControllerTest.java)
 
 ```java
+package com.kbstar.springboot.study.web;
+
+import com.kbstar.springboot.study.web.HelloController;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+
+// 03. 아래 import는 처음 한번 직접 타이핑(Alt-Enter)에서 없는 녀석
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers= HelloController.class)
 public class HelloControllerTest {
@@ -62,53 +275,74 @@ public class HelloControllerTest {
 
 }
 
-```
-
-
-
-### 04. Lombok 설치
-    앞으로 할 일( Lombok  : 생성자, getter/setter를 자동으로 처리)
 /*
 전체구조는 main쪽의 구조와 같아야 한다.
 
 @ExtendWith , 이전에는 @RunWith
 @WebMvcTest
-@Controller
+    @Controller
 @Autowired 자동주입
-field, constructor, setter
+    field, constructor, setter
+
+04. Lombok 설치
+앞으로 할 일( Lombok  : 생성자, getter/setter를 자동으로 처리)
 
 Ctrl+Shift+A
 plugins => Lombok 설치 확인
 build.gradle에 추가
-*/
+ */
+
+```
+
+
+
+### 04. Lombok 설치
+
+    앞으로 할 일( Lombok  : 생성자, getter/setter를 자동으로 처리)
+
+    전체구조는 main쪽의 구조와 같아야 한다.
+    
+    @ExtendWith , 이전에는 @RunWith
+    @WebMvcTest
+    @Controller
+    @Autowired 자동주입
+    field, constructor, setter
+    
+    Ctrl+Shift+A
+    plugins => Lombok 설치 확인
+    build.gradle에 추가
+
 
 
 ### 05 DTO : Data Transfer Object
+#### **`HelloResponseDto.java`**
 
 ```java
-@Getter : field의 get method를 자동으로 생성
-@RequreiredArgsConstructor
-선언된 field가 포함된 생성자 자동 생성
+//@Getter : field의 get method를 자동으로 생성
+//@RequreiredArgsConstructor
+//선언된 field가 포함된 생성자 자동 생성
+
 private String name;
 private int age;
+
 public HelloResponseDto(String name, int age)
 {
-this.name = name;
-this.age = age;
+    this.name = name;
+    this.age = age;
 }
 
-    public String getName()
-    {
-        return this.name;
-    }
+public String getName()
+{
+    return this.name;
+}
 
-    public int getAge()
-    {
-        return this.age;
-    }
+public int getAge()
+{
+    return this.age;
+}
 
-    Lombok에 getter가 자동으로 생성..==> 확인
-    단위테스트로 확인 ==> main, test구조가 같다.
+//    Lombok에 getter가 자동으로 생성..==> 확인
+//    단위테스트로 확인 ==> main, test구조가 같다.
 
 */
 ```
@@ -117,32 +351,35 @@ this.age = age;
 
 
 ### 6. Getter가 자동으로 동작하는지 단위테스트
+#### **`HelloResponseDtoTest.java`**
+
 ```java
- public class HelloResponseDtoTest {
-   @Test
+ public class HelloResponseDtoTest { 
+    
+    @Test
    public void lombokTest()
    {
-   String name = "test";
-   int age = 34;
+       String name = "test";
+       int age = 34;
 
-       HelloResponseDto  dto = new HelloResponseDto(name, age);
+       HelloResponseDto dto = new HelloResponseDto(name, age);
        assertThat(dto.getName()).isEqualTo(name);
        assertThat(dto.getAge()).isEqualTo(age);
    }
-   }
+}
 
 @Getter
 @RequiredArgsConstructor
 public class HelloResponseDto {
-private final String name;
-private final int age;
+    private final String name;
+    private final int age;
 }
 
 // REST vs. 이전 http://localhost/main.php?cmd=test&idx=3
 // http://localhost/hello
 // JSON(JavaScript Onbject Notation)를 매핑해준다.
 // Method의 종류 : GET, POST, PUT, DELETE
-/*
+
 HTTP Error Code
 1xx : Trying
 2xx : OK
@@ -154,9 +391,10 @@ HTTP Error Code
 5xx : Server Error
 6xx : Global Error
 
-    스프링 부트 : POST(insert), PUT(update)을 구분
-    cf. DELETE (삭제)
-    
+스프링 부트 : POST(insert), PUT(update)을 구분
+cf. DELETE (삭제)
+
+// http://localhost:8080/hello/dto/?name=홍길동&age=78
     
 @RestController
 public class HelloController {
@@ -180,7 +418,31 @@ public class HelloController {
 }
 
 ```
-  
+
+### 11. JPA
+
+    Java Persistence API : 자바 지속성 API
+    클래스 <-> DB 자동 Mapping
+    기존 방식 : 프로그래밍의 대부분이 Query
+    ORM(Object Relational Mapping)
+    ==> SQL의 종속성에서 벗어나게 하겠다.
+
+    CRUD ( Create, Read,  Update, Delete)
+        조회 : Member member = jpa.find(memberId)
+    JPA를 사용할 때의 장점 : 수정이 매우 간단하다.(유지보수)
+        객체(Class)가 변경되면 , 알아서 DB에 Update Query 날라간다.
+
+    +--------------------------+
+    |  Java Application        |
+    |  +--------------------+  |
+    |  | JPA                |  |
+    |  |  +--------------+  |  |           +----------+
+    |  |  |   JDBC API   |- |- |----SQL--->|   DB     |
+    |  |  |              |<-|- |---------- |          |
+    |  |  +--------------+  |  |           + ---------+
+    |  +--------------------+  |
+    +-------------------------+
+
 
 
 ### 13. 게시글 관련 클래스 정의
@@ -188,20 +450,20 @@ public class HelloController {
         <input type='file' name='upfile'>
     </form>
 
-@Entity : JPA에서 필요한 annotation
-테이블과 클래스를 매핑해준다.
-Posts.java  -> posts 데이터베이스 테이블 매핑
-MyPosts.java -> my_post 테이블을 만든다.
-myFamilyCount (O)
-my_family_count (X)
-@Id : 데이터베이스의 키 값
-@GeneratedValue : 키 생성
-@Column : 데이터베이스 테이블을 내부적을 생성해줄 때 사이즈 등을 설정
-
-==> 할 일 : 저장소를 위한 PostsRepository 생성해야 한다.
-class : PostsRepository.java
-
-```java
+    @Entity : JPA에서 필요한 annotation
+        테이블과 클래스를 매핑해준다.
+        Posts.java  -> posts 데이터베이스 테이블 매핑
+        MyPosts.java -> my_post 테이블을 만든다.
+        myFamilyCount (O)
+        my_family_count (X)
+    @Id : 데이터베이스의 키 값
+    @GeneratedValue : 키 생성
+    @Column : 데이터베이스 테이블을 내부적을 생성해줄 때 사이즈 등을 설정
+    
+    ==> 할 일 : 저장소를 위한 PostsRepository 생성해야 한다.
+    class : PostsRepository.java
+#### **`Posts.java`**
+```java 
 @Getter
 @NoArgsConstructor
 @Entity
@@ -244,6 +506,8 @@ public class Posts {
         이 둘은 같은 위치에 있어야 한다.
 
         할 일 : 저장소 처리가 잘 되는 지 확인 ==> 단위테스트트
+
+#### **`PostsRepository.java`**
 ```java
 public interface PostsRepository  extends JpaRepository<Posts, Long> {
 
@@ -419,7 +683,7 @@ private final PostsRepository postsRepository;
 ```
 
 ### 20. 작업순서
-```java
+
 
     Controller -----(DTO)---------> Service 저장 요청 ------> DB
 
@@ -439,10 +703,7 @@ private final PostsRepository postsRepository;
     </form>
 
 
-
-
-
-*/
+```java
 @RequiredArgsConstructor
 @RestController
 public class PostsApiController {
