@@ -1,6 +1,6 @@
 # SpringBoot
 ```text
-
+├── README
 ├── README.md
 ├── build
 │   ├── classes
@@ -20,10 +20,14 @@
 │   │       │                   │   └── PostsService.class
 │   │       │                   └── web
 │   │       │                       ├── HelloController.class
+│   │       │                       ├── PostsApiController.class
 │   │       │                       └── dto
 │   │       │                           ├── HelloResponseDto.class
+│   │       │                           ├── PostsResponseDto.class
 │   │       │                           ├── PostsSaveRequestDto$PostsSaveRequestDtoBuilder.class
-│   │       │                           └── PostsSaveRequestDto.class
+│   │       │                           ├── PostsSaveRequestDto.class
+│   │       │                           ├── PostsUpdateRequestDto$PostsUpdateRequestDtoBuilder.class
+│   │       │                           └── PostsUpdateRequestDto.class
 │   │       └── test
 │   │           ├── Application.class
 │   │           └── com
@@ -36,6 +40,7 @@
 │   │                           │       └── PostsRepositoryTest.class
 │   │                           └── web
 │   │                               ├── HelloControllerTest.class
+│   │                               ├── PostsApiControllerTest.class
 │   │                               └── dto
 │   │                                   └── HelloResponseDtoTest.class
 │   ├── generated
@@ -52,7 +57,7 @@
 │   │   └── tests
 │   │       └── test
 │   │           ├── classes
-│   │           │   └── com.kbstar.springboot.study.domain.posts.PostsRepositoryTest.html
+│   │           │   └── com.kbstar.springboot.study.web.PostsApiControllerTest.html
 │   │           ├── css
 │   │           │   ├── base-style.css
 │   │           │   └── style.css
@@ -60,13 +65,13 @@
 │   │           ├── js
 │   │           │   └── report.js
 │   │           └── packages
-│   │               └── com.kbstar.springboot.study.domain.posts.html
+│   │               └── com.kbstar.springboot.study.web.html
 │   ├── resources
 │   │   └── main
 │   │       └── application.properties
 │   ├── test-results
 │   │   └── test
-│   │       ├── TEST-com.kbstar.springboot.study.domain.posts.PostsRepositoryTest.xml
+│   │       ├── TEST-com.kbstar.springboot.study.web.PostsApiControllerTest.xml
 │   │       └── binary
 │   │           ├── output.bin
 │   │           ├── output.bin.idx
@@ -104,7 +109,9 @@
     │   │                       ├── PostsApiController.java
     │   │                       └── dto
     │   │                           ├── HelloResponseDto.java
-    │   │                           └── PostsSaveRequestDto.java
+    │   │                           ├── PostsResponseDto.java
+    │   │                           ├── PostsSaveRequestDto.java
+    │   │                           └── PostsUpdateRequestDto.java
     │   └── resources
     │       └── application.properties
     └── test
@@ -120,8 +127,11 @@
                             │       └── PostsRepositoryTest.java
                             └── web
                                 ├── HelloControllerTest.java
+                                ├── PostsApiControllerTest.java
                                 └── dto
                                     └── HelloResponseDtoTest.java
+
+73 directories, 57 files
 
 
 ```
