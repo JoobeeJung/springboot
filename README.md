@@ -834,7 +834,7 @@ private final PostsService postsService;
           |        HTML Body          |
           |         ...               |
           +---------------------------+
-    http://localhost:12345/api/v1/postshttp://localhost:12345/api/v1/posts  
+    http://localhost:12345/api/v1/posts
 
 #### **`PostsApiControllerTest.java`**
 
@@ -968,8 +968,8 @@ public class PostsResponseDto {
 
 ###  25. 업데이트를 위한 매핑 (객체랑 DB)
 
-    등록 : /api/v1/posts    <--- 새글 등록록
-    수정 : /api/v1/posts/3  <--- 3번글을 수정해
+    등록 : /api/v1/posts    <--- 새글 등록
+    수정 : /api/v1/posts/3  <--- 3번글을 수정
 
     1. DTO --> Service --> Controller
 
