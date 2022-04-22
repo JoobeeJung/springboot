@@ -723,7 +723,7 @@ spring.datasource.hikari.username=sa
          |                       |   |  Posts    |
          +-----------------------+   +-----------+
 
-### 19. Service 등록 //TBD final 질문
+### 19. Service 등록
 
 #### 자동으로 만들어지는 생성
 ```java
