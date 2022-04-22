@@ -357,7 +357,7 @@ public class HelloControllerTest {
     @ExtendWith , 이전에는 @RunWith
     @WebMvcTest
     @Controller
-    @Autowired 자동주입 // lombok 안에 있는거 ? TBD
+    @Autowired 자동주입
     field, constructor, setter
     
     Ctrl+Shift+A
@@ -607,7 +607,7 @@ public interface PostsRepository  extends JpaRepository<Posts, Long> {
         테스트가 DB 추가 => 실제 데이터에 영향을 미칠 수 있다.
             테스트가 실제 데이터에 영향을 주지 않도록 처리
             in-memory DB : H2DB (매번 데이터가 날라감)
-            postsRepository.save() //TBD update를 왜 따로 만드는 이유는?
+            postsRepository.save()
                 INSERT / UPDATE 둘 중 하나를 수행.
                 키 값이 없으면 : INSERT
                 키 값이 있으면 : UPDATE
@@ -973,7 +973,6 @@ public class PostsResponseDto {
 
     1. DTO --> Service --> Controller
 
-//TBD () -> 의미
 #### **`PostsService.java`**
 ```java
 
@@ -981,7 +980,7 @@ public class PostsResponseDto {
     public Long update(Long id, PostsUpdateRequestDto requestDto )
     {
         Posts posts = postsRepository.findById(id).orElseThrow(
-                        ()-> new IllegalArgumentException("No id for Post indById(id).o: " + id)
+                        ()-> new IllegalArgumentException("No id for Post indById(id).o: " + id) //ES6 Lamda함수와 동일
         );
     
         posts.update(requestDto.getTitle(), requestDto.getContent());
