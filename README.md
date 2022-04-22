@@ -762,7 +762,17 @@ private String author;
 @RequiredArgsConstructor
 @Service
 public class PostsService {
-private final PostsRepository postsRepository;
+    private final PostsRepository postsRepository;
+    private final String  name;
+    private String color;
+    /*
+    public PostsService(PostsRepository postsRepository, String name)
+    {
+        this.postsRespository = postsRepository;
+    }
+    */
+
+
 
     @Transactional
     public Long save(PostsSaveRequestDto requestDto)
