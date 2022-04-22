@@ -763,9 +763,10 @@ private String author;
 @Service
 public class PostsService {
     private final PostsRepository postsRepository;
-    private final String  name;
-    private String color;
-    /*
+    // private final String  name;
+    // private String color;
+    /* java final과는 구분해서 생각하는게 좋다. java에서는 final은 초기화를 했는데 위의 final은 초기화 필요가 없다.
+        final로 선언되지 않은 생성자는 아래처럼 자동으로 생성되지 않는다. Not Null 인 args만 초기화 된다고 이해하면 좋다.
     public PostsService(PostsRepository postsRepository, String name)
     {
         this.postsRespository = postsRepository;
