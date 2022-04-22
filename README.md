@@ -1036,7 +1036,7 @@ public class PostsResponseDto {
                                                 .build()
         );
 
-        // 정상적으로 들어갔다면.. 맨 마지막데이터가 나
+        // 정상적으로 들어갔다면.. 맨 마지막데이터가 나옴
         Long updateId = savedPosts.getId();
         String expectedTitle = "kb title";
         String expectedContent = "kb contnet";
