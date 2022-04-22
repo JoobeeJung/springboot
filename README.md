@@ -149,7 +149,7 @@
          |                       |   |  Posts    |
          +-----------------------+   +-----------+
 
-## SpringBoot DB 구조
+## SpringBoot JPA 구조
 
 ### 조회
 ```text
@@ -180,7 +180,7 @@
 +---------------------------------------------+
 ```
 
-### 저장
+### 저장 및 확인
 ```text
 +---------------------------------------------+
 |                                             |
@@ -188,7 +188,7 @@
 |   |           |              | JPA        | |
 |   |   Member  |--find(id)--->|  +-------+ | |                     +------+
 |   |   DAO     |              |  | JDBC  | + +---(insert SQL) ---> |  DB  |
-|   |           |    (entity)  |  | API   | | |<------ Ret -------- |      |
+|   |           |    (entity)  |  | API   | | |<---- Return ------- |      |
 |   |           |<-- (object) -|  +-------+ | |                     +------+
 |   +-----------+              +------------+ |
 |                                             |
@@ -357,7 +357,7 @@ public class HelloControllerTest {
     @ExtendWith , 이전에는 @RunWith
     @WebMvcTest
     @Controller
-    @Autowired 자동주입 // lombok 안에 있는거 ? TBD
+    @Autowired 자동주입
     field, constructor, setter
     
     Ctrl+Shift+A
@@ -487,13 +487,12 @@ public class HelloController {
 ```
 ### 08. DTO GET Mapping 확인
     Application.java를 실행하여 아래 url를 통해 동작하는 지 확인한다.
-    http://localhost:8080/hello/dto?name=홍길동&age=12
     http://localhost:8080/hello/dto/?name=홍길동&age=12
-   ![img.png](img.png)  
+ <img width="464" alt="image" src="https://user-images.githubusercontent.com/49167217/164649597-f6a637ca-190c-40ab-ae18-f1e94687e954.png">
 
----------
+-------------
 
-## DB SELECT
+## POST SELECT
 
 ### 11. JPA
     SQL 문 없이 동작할 수 있는 프로그램
@@ -607,7 +606,7 @@ public interface PostsRepository  extends JpaRepository<Posts, Long> {
         테스트가 DB 추가 => 실제 데이터에 영향을 미칠 수 있다.
             테스트가 실제 데이터에 영향을 주지 않도록 처리
             in-memory DB : H2DB (매번 데이터가 날라감)
-            postsRepository.save() //TBD update를 왜 따로 만드는 이유는?
+            postsRepository.save()
                 INSERT / UPDATE 둘 중 하나를 수행.
                 키 값이 없으면 : INSERT
                 키 값이 있으면 : UPDATE
@@ -724,7 +723,7 @@ spring.datasource.hikari.username=sa
          |                       |   |  Posts    |
          +-----------------------+   +-----------+
 
-### 19. Service 등록 //TBD final 질문
+### 19. Service 등록
 
 #### 자동으로 만들어지는 생성
 ```java
@@ -762,8 +761,20 @@ private String author;
 @RequiredArgsConstructor
 @Service
 public class PostsService {
-private final PostsRepository postsRepository;
+    private final PostsRepository postsRepository;
+    // private final String  name;
+    // private String color;
+    /* java final과는 구분해서 생각하는게 좋다. java에서는 final은 초기화를 했는데 위의 final은 초기화 필요가 없다.
+        final로 선언되지 않은 생성자는 아래처럼 자동으로 생성되지 않는다. Not Null 인 args만 초기화 된다고 이해하면 좋다.
+    public PostsService(PostsRepository postsRepository, String name)
+    {
+        this.postsRespository = postsRepository;
+    }
+    */
 
+
+    // Long이 return 타입인 이유는 해당 transaction 이후 성공하면 해당하는 DB ID를 리턴하기 위함.
+    // DB 액션은 @Transactional를 추가함으로써 all or nothing 
     @Transactional
     public Long save(PostsSaveRequestDto requestDto)
     {
@@ -824,7 +835,7 @@ private final PostsService postsService;
           |        HTML Body          |
           |         ...               |
           +---------------------------+
-    http://localhost:12345/api/v1/postshttp://localhost:12345/api/v1/posts  
+    http://localhost:12345/api/v1/posts
 
 #### **`PostsApiControllerTest.java`**
 
@@ -958,12 +969,11 @@ public class PostsResponseDto {
 
 ###  25. 업데이트를 위한 매핑 (객체랑 DB)
 
-    등록 : /api/v1/posts    <--- 새글 등록록
-    수정 : /api/v1/posts/3  <--- 3번글을 수정해
+    등록 : /api/v1/posts    <--- 새글 등록
+    수정 : /api/v1/posts/3  <--- 3번글을 수정
 
     1. DTO --> Service --> Controller
 
-//TBD () -> 의미
 #### **`PostsService.java`**
 ```java
 
@@ -971,7 +981,7 @@ public class PostsResponseDto {
     public Long update(Long id, PostsUpdateRequestDto requestDto )
     {
         Posts posts = postsRepository.findById(id).orElseThrow(
-                        ()-> new IllegalArgumentException("No id for Post indById(id).o: " + id)
+                        ()-> new IllegalArgumentException("No id for Post indById(id).o: " + id) //ES6 Lamda함수와 동일
         );
     
         posts.update(requestDto.getTitle(), requestDto.getContent());
@@ -1026,7 +1036,7 @@ public class PostsResponseDto {
                                                 .build()
         );
 
-        // 정상적으로 들어갔다면.. 맨 마지막데이터가 나
+        // 정상적으로 들어갔다면.. 맨 마지막데이터가 나옴
         Long updateId = savedPosts.getId();
         String expectedTitle = "kb title";
         String expectedContent = "kb contnet";
