@@ -160,7 +160,7 @@
 |     | JPA              |    |
 |     | +--------------+ |    |            +---------+
 |     | |  JDBC        + +----+---SQL--->  |   DB    |
-|     | |  API         + +<---+---Ret----  |         |
+|     | |  API         + +<---+--Return--  |         |
 |     | +--------------+ |    |            +---------+
 |     +------------------+    |
 +-----------------------------+
@@ -246,10 +246,10 @@ dependencies {
 
 ```
 
-### 1. SpringBoot 자동설정 (Application.java) <br>
+### 01. SpringBoot 자동설정 (Application.java) <br>
     Path : /src/main/java/com/kbstar/springboot/study/Application
-    <br> 여기서 부터 설정을 읽는다.
-    <br> 항상 프로젝트의 최상단에 위치
+    여기서 부터 설정을 읽는다.
+    항상 프로젝트의 최상단에 위치
 
 ```java
 @SpringBootApplication
@@ -264,13 +264,15 @@ dependencies {
 ```
 
 
-### 2. 설정 바꾸기 (Application.java)
+### 02. 설정 바꾸기 (Application.java)
     File -> Setting -> Editor -> General -> Code Completion -> Match case 해제
-    -> Apply (자동완성 대소문자 구분 하지 않기 위함) <br>
+    -> Apply (자동완성 대소문자 구분 하지 않기 위함)
+
     JSP : MVC Model
     Model, View, Controller
 
-### 3. 수기 import (HelloControllerTest.java)
+### 03. 수기 import (HelloControllerTest.java)
+##### **`HelloControllerTest.java`**
 
 ```java
 package com.kbstar.springboot.study.web;
@@ -337,15 +339,9 @@ public class HelloControllerTest {
 @ExtendWith , 이전에는 @RunWith
 @WebMvcTest
     @Controller
-@Autowired 자동주입
+@Autowired 자동주입 java 의 Car taxi = new Car() 의 new Car()에 해당한다고 생각하면 된다.
     field, constructor, setter
 
-04. Lombok 설치
-앞으로 할 일( Lombok  : 생성자, getter/setter를 자동으로 처리)
-
-Ctrl+Shift+A
-plugins => Lombok 설치 확인
-build.gradle에 추가
  */
 
 ```
@@ -361,16 +357,23 @@ build.gradle에 추가
     @ExtendWith , 이전에는 @RunWith
     @WebMvcTest
     @Controller
-    @Autowired 자동주입
+    @Autowired 자동주입 // lombok 안에 있는거 ? TBD
     field, constructor, setter
     
     Ctrl+Shift+A
     plugins => Lombok 설치 확인
     build.gradle에 추가
 
+```gradle
+dependencies {
+    implementation('org.projectlombok:lombok')
+    implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+}
+
+```
 
 
-### 05 DTO : Data Transfer Object
+### 05. DTO : Data Transfer Object
 #### **`HelloResponseDto.java`**
 
 ```java
@@ -406,7 +409,7 @@ public int getAge()
 
 
 
-### 6. Getter가 자동으로 동작하는지 단위테스트
+### 06. Getter가 자동으로 동작하는지 단위테스트
 #### **`HelloResponseDtoTest.java`**
 
 ```java
@@ -434,18 +437,18 @@ public class HelloResponseDto {
 // REST vs. 이전 http://localhost/main.php?cmd=test&idx=3
 // http://localhost/hello
 // JSON(JavaScript Onbject Notation)를 매핑해준다.
-// Method의 종류 : GET, POST, PUT, DELETE
+// Method의 종류 : GET(Select), POST(Insert), PUT(Update), DELETE
 
 HTTP Error Code
-1xx : Trying
+1xx : Trying (Request는 100번대 만)
 2xx : OK
 3xx : Temporary Error, Redirection Error
-4xx : Permanent Error, Client Error
+4xx : Permanent Error, Client Error (사용자 오류)
 403 : Forbidden
 404 : Not Found
 405 : Method Not Allowed
 5xx : Server Error
-6xx : Global Error
+6xx : Global Error (전쟁 시 등)
 
 스프링 부트 : POST(insert), PUT(update)을 구분
 cf. DELETE (삭제)
@@ -461,10 +464,6 @@ public class HelloController {
         return "hello";
     }
 
-    /* 08. http://localhost:8080/hello/dto?name=홍길동&age=12
-            http://localhost:8080/hello/dto/?name=홍길동&age=12
-     */
-
     @GetMapping("/hello/dto")
     public HelloResponseDto helloDto(@RequestParam("name") String name,
                                      @RequestParam("age") int age)
@@ -475,7 +474,30 @@ public class HelloController {
 
 ```
 
+### 07. Getter 동작을 위한 gradle 설정 추가
+
+```gradle
+    // 07 getter가 정상적으로 동작하기 위해 추가
+    // 뭔가가 변경되면 항상 새로고침(Sync)
+    // HelloResponseDtoTest 단위테스트
+    
+    annotationProcessor('org.projectlombok:lombok')
+    testImplementation('org.projectlombok:lombok')
+    testAnnotationProcessor('org.projectlombok:lombok')
+```
+### 08. DTO GET Mapping 확인
+    Application.java를 실행하여 아래 url를 통해 동작하는 지 확인한다.
+    http://localhost:8080/hello/dto?name=홍길동&age=12
+    http://localhost:8080/hello/dto/?name=홍길동&age=12
+   ![img.png](img.png)  
+
+---------
+
+## DB SELECT
+
 ### 11. JPA
+    SQL 문 없이 동작할 수 있는 프로그램
+    해당하는 기능은 현재 Springboot 프레임워크만 지원하고 있음
 
     Java Persistence API : 자바 지속성 API
     클래스 <-> DB 자동 Mapping
@@ -499,9 +521,16 @@ public class HelloController {
     |  +--------------------+  |
     +-------------------------+
 
+### 12. JPA작동을 위한 gradle 설정 추가
 
+```gradle
+    // 12. JPA : use in-memory databse H2DB ==> Sync
+    implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+    implementation('com.h2database:h2')
+```
 
 ### 13. 게시글 관련 클래스 정의
+    웹 프로그래밍에서는 아래와 같이 정의했음
     <form method='post' enctype='multipart/form-data' action='a.jsp'>
         <input type='file' name='upfile'>
     </form>
@@ -549,7 +578,7 @@ public class Posts {
 ```
 
 
-### 14. 저장소를 위한 interface
+### 14. 저장소를 위한 interface 생성
     Posts 클래스로 부터 DB 접근이 가능하게 해 줄 JpaRepository
     MyBatis : DAO : Data Access Object
     cf. DTO : Data Transfer Object
@@ -577,8 +606,8 @@ public interface PostsRepository  extends JpaRepository<Posts, Long> {
         각 단위테스트가 끝날 때 마다 수행해야하는 작업 정의
         테스트가 DB 추가 => 실제 데이터에 영향을 미칠 수 있다.
             테스트가 실제 데이터에 영향을 주지 않도록 처리
-            in-memory DB : H2DB
-            postsRepository.save()
+            in-memory DB : H2DB (매번 데이터가 날라감)
+            postsRepository.save() //TBD update를 왜 따로 만드는 이유는?
                 INSERT / UPDATE 둘 중 하나를 수행.
                 키 값이 없으면 : INSERT
                 키 값이 있으면 : UPDATE
@@ -590,9 +619,10 @@ public interface PostsRepository  extends JpaRepository<Posts, Long> {
             결과를 List Collection에 add()
 
       현재 : Test => Success
-        내부적으로 어떤일을 수행하는지 확인. => Query 출력
+        내부적으로 어떤일을 수행하는지 확인. => SQL Query 출력
         => main/resources/application.properties 파일을 만들어서 세팅
 
+#### **`PostsRepositoryTest.java`**
 ```java
 
 @ExtendWith(SpringExtension.class)
@@ -646,10 +676,16 @@ PostsRepository postsRepository;
 
 ```
 
-# 17.단위 테스트 쿼리를 확인하는 방법
-spring.jpa.show_sql=true
+### 17.단위 테스트 쿼리를 확인하는 방법
 
-# 18. 쿼리를 mysql/maria db 형태로 바꿔서 보기
+#### **`application.properties`**
+```yaml
+spring.jpa.show_sql=true
+```
+
+#### 쿼리를 mysql/maria db 형태로 바꿔서 보기
+
+#### **`application.properties`**
 ```yaml
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL57Dialect
 spring.jpa.properties.hibernate.dialect.storage_engine=innodb
@@ -669,11 +705,11 @@ spring.datasource.hikari.username=sa
 
 
 ### 18. 게시글 저장을 위한 데이터 덩어리 만들기
-id, title, content, author
-insert into posts (title, content, author) values (?, ?, ?);
-
-Web layer에서 데이터를 받아서 repository에 저장하기 위해서 DTO로 받을 데이터를 정의하고
-Service layer 통해서 저장. 데이터가 변하면 Domain model 쪽만 변경됨
+    데이터 필드 : id, title, content, author
+    insert into posts (title, content, author) values (?, ?, ?);
+    
+    Web layer에서 데이터를 받아서 repository에 저장하기 위해서 DTO로 받을 데이터를 정의하고
+    Service layer 통해서 저장. 데이터가 변하면 Domain model 쪽만 변경됨
 
          +-----------------------+   +-----------+
          |    Web Layer          |   |           |
@@ -688,6 +724,19 @@ Service layer 통해서 저장. 데이터가 변하면 Domain model 쪽만 변�
          |                       |   |  Posts    |
          +-----------------------+   +-----------+
 
+### 19. Service 등록 //TBD final 질문
+
+#### 자동으로 만들어지는 생성
+```java
+  public PostsService(PostsRepository postsRepository)
+    {
+        this.postsRepository = postsRepository;
+    }
+
+//    Transaction : All or Nothing
+```
+  
+    
 ```java
 @Getter
 @NoArgsConstructor
@@ -710,18 +759,6 @@ private String author;
     }
 }
 
-/*
-19. Service 등록
-
-    자동으로 만들어지는 생성
-
-    public PostsService(PostsRepository postsRepository)
-    {
-        this.postsRepository=postsRepository;
-    }
-
-    Transaction : All or Nothing
-*/
 @RequiredArgsConstructor
 @Service
 public class PostsService {
@@ -758,6 +795,7 @@ private final PostsRepository postsRepository;
         <button type="submit">저장</button>
     </form>
 
+#### **`PostsApiController.java`**
 
 ```java
 @RequiredArgsConstructor
@@ -772,5 +810,250 @@ private final PostsService postsService;
         return postsService.save(requestDto);
     }
 }
+
+```
+
+### 21. 단위테스트
+    HTML Request/Response
+    Client -----req---------> Server
+            <-----res -------
+
+          +---------------------------+
+          |        HTML Header        |
+          +---------------------------+
+          |        HTML Body          |
+          |         ...               |
+          +---------------------------+
+    http://localhost:12345/api/v1/postshttp://localhost:12345/api/v1/posts  
+
+#### **`PostsApiControllerTest.java`**
+
+```java
+ @Test
+    public void postsRegistTest() throws Exception
+    {
+        String title = "test title";
+        String content = "test content";
+        String author = "test author";
+
+        PostsSaveRequestDto requestDto = PostsSaveRequestDto
+                                            .builder()
+                                                .title(title)
+                                                .content(content)
+                                                .author(author)
+                                           .build();
+        System.out.println("-------------- requestDto.title = " + requestDto.getTitle());
+
+        // http://localhost:12345/api/v1/posts
+       
+        //PostsSaveRequestDto requestDto = PostsSaveRequestDto.builder()
+        //        .title(title).content(content).author("author").build();
+
+        System.out.println("-------------- dto title = " + requestDto.getTitle());
+
+        String url = "http://localhost:" + port + "/api/v1/posts";
+
+        System.out.println("------------------- port : " + port);
+
+        ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, requestDto, Long.class);
+
+        assertThat(responseEntity.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isGreaterThan(0L);
+        /*
+            float degree = 1.23F;
+            long value = 123L;
+         */
+
+        List<Posts> all = postsRepository.findAll();
+        assertThat(all.get(0).getTitle()).isEqualTo(title);
+        assertThat(all.get(0).getContent()).isEqualTo(content);
+    }
+```
+---------------
+
+## POST UPDATE 
+
+### 22. Post Update
+
+    개발 순서 :
+    1. DTO
+    2. Service
+    3. Controller
+
+#### **`PostsUpdateRequestDto.java`**
+```java
+package com.kbstar.springboot.study.web.dto;
+
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor
+public class PostsUpdateRequestDto {
+    private String title;
+    private String content;
+
+    @Builder
+    public PostsUpdateRequestDto(String title, String content)
+    {
+        this.title = title;
+        this.content = content;
+    }
+}
+
+```
+
+### 23. Request에 대한 응답 데이터 만들기
+
+          1
+                 Dto(4)
+          2
+                Entity(5)
+          3
+
+          5를 이용해 4번을 만들기
+
+#### **`PostsResponseDto.java`**
+```java
+
+package com.kbstar.springboot.study.web.dto;
+
+import com.kbstar.springboot.study.domain.posts.Posts;
+import lombok.Getter;
+
+@Getter
+public class PostsResponseDto {
+    private Long id;
+    private String title;
+    private String content;
+    private String author;
+
+    public PostsResponseDto(Posts entity)
+    {
+        this.id = entity.getId();
+        this.title = entity.getTitle();
+        this.content = entity.getContent();
+        this.author = entity.getAuthor();
+    }
+}
+
+```
+
+### 24. 데이터 지속성(Consistent : 객체와 Entity의 일치)
+        객체가 업데이트 되면 자동으로 DB데이터가 변경
+
+        실제 DB에 업데이트되도록 만들기.
+        DTO 작업끝났다. ----> Service로 가서 작업
+
+#### **`Posts.java`**
+```java
+    public void update(String title, String content)
+        {
+            this.title = title;
+            this.content = content;
+        }
+
+```
+
+###  25. 업데이트를 위한 매핑 (객체랑 DB)
+
+    등록 : /api/v1/posts    <--- 새글 등록록
+    수정 : /api/v1/posts/3  <--- 3번글을 수정해
+
+    1. DTO --> Service --> Controller
+
+//TBD () -> 의미
+#### **`PostsService.java`**
+```java
+
+    @Transactional
+    public Long update(Long id, PostsUpdateRequestDto requestDto )
+    {
+        Posts posts = postsRepository.findById(id).orElseThrow(
+                        ()-> new IllegalArgumentException("No id for Post indById(id).o: " + id)
+        );
+    
+        posts.update(requestDto.getTitle(), requestDto.getContent());
+    
+        return id;
+    }
+    
+    public PostsResponseDto findById(Long id)
+    {
+        Posts posts = postsRepository.findById(id).orElseThrow(
+                        ()-> new IllegalArgumentException("No id for Post indById(id).o: " + id)
+        );
+    
+        return new PostsResponseDto(posts);
+    }
+
+```
+
+###     26 수정을 위한 REST 등록
+    Method : POST, PUT(0), GET, DELETE
+
+    DTO -> Service -> Controller -> 단위테스트
+#### **`PostsApiController.java`**
+
+```java
+@PutMapping("/api/v1/posts/{id}")
+    public Long update(@PathVariable Long id,
+                       @RequestBody PostsUpdateRequestDto requestDto)
+    {
+        return postsService.update(id, requestDto);
+    }
+@GetMapping("/api/v1/posts/{id}")
+    public PostsResponseDto findById(@PathVariable Long id)
+    {
+        return postsService.findById(id);
+    }
+
+```
+
+### 27 수정하기 단위테스트
+  
+#### **`PostsApiControllerTest.java`**
+
+```java
+    @Test
+    public void postsUpdateTest() throws Exception {
+        Posts savedPosts = postsRepository.save(Posts
+                                                .builder()
+                                                    .title("test title")
+                                                    .content("test content")
+                                                    .author("test author")
+                                                .build()
+        );
+
+        // 정상적으로 들어갔다면.. 맨 마지막데이터가 나
+        Long updateId = savedPosts.getId();
+        String expectedTitle = "kb title";
+        String expectedContent = "kb contnet";
+
+        PostsUpdateRequestDto requestDto = PostsUpdateRequestDto
+                                            .builder()
+                                                .title(expectedTitle)
+                                                .content(expectedContent)
+                                            .build();
+
+        String url = "http://localhost:"+port+ "/api/v1/posts/"+updateId;
+        HttpEntity<PostsUpdateRequestDto> requestEntity = new HttpEntity<>(requestDto);
+
+        ResponseEntity<Long> responseEntity = restTemplate.exchange(
+                                                                    url,
+                                                                    HttpMethod.PUT,
+                                                                    requestEntity,
+                                                                    Long.class
+                                               );   
+        assertThat(responseEntity.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isGreaterThan(0L);
+    
+        List<Posts> all = postsRepository.findAll();
+        assertThat(all.get(0).getTitle()).isEqualTo(expectedTitle);
+        assertThat(all.get(0).getContent()).isEqualTo(expectedContent);
+        }
+    }
+
 
 ```
