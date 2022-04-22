@@ -773,7 +773,8 @@ public class PostsService {
     */
 
 
-
+    // Long이 return 타입인 이유는 해당 transaction 이후 성공하면 해당하는 DB ID를 리턴하기 위함.
+    // DB 액션은 @Transactional를 추가함으로써 all or nothing 
     @Transactional
     public Long save(PostsSaveRequestDto requestDto)
     {
