@@ -1075,3 +1075,5 @@ public class PostsResponseDto {
 
 <img width="502" alt="image" src="https://user-images.githubusercontent.com/49167217/164694724-a422097a-a643-4b60-a673-180aa666103b.png">
 
+
+### 31. JPA Auditing(감시)
