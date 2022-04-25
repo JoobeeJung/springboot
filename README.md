@@ -1077,3 +1077,8 @@ public class PostsResponseDto {
 
 
 ### 31. JPA Auditing(감시)
+### 32. JPA Auditing을 위해서 BaseTimeEntity 클래스를 상속받는다. (Posts.java)
+### 33. JPA Auditing을 위한 어노테이션 추가만 하면 끝
+    Application 재기동 이후 아래와 같이 DB 필드에 자동으로 필드 생성
+<img width="198" alt="스크린샷 2022-04-25 오전 9 34 27" src="https://user-images.githubusercontent.com/49167217/165003558-51d15d13-9356-4513-bb8f-f21113a776ce.png">
+
