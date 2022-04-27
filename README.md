@@ -1082,3 +1082,19 @@ public class PostsResponseDto {
     Application 재기동 이후 아래와 같이 DB 필드에 자동으로 필드 생성
 <img width="198" alt="스크린샷 2022-04-25 오전 9 34 27" src="https://user-images.githubusercontent.com/49167217/165003558-51d15d13-9356-4513-bb8f-f21113a776ce.png">
 
+
+### 34.H2DB -> MariaDB로 설정 변경하기
+
+#### **`build.gradle`**
+```gradle
+    implementation('org.mariab.jdbc::mariadb-java-client:2.1.2')
+```
+
+#### **`application.properties`**
+```yaml
+## MariaDB
+spring.datasource.driverClassName=org.mariadb.jdbc.Driver
+spring.datasource.url=jdbc:mariadb://localhost:3306/mykb?useUnicode=true&characterEncoding=utf-8
+spring.datasource.username=mykb
+spring.datasource.password=1111
+```
