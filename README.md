@@ -1087,7 +1087,7 @@ public class PostsResponseDto {
 
 #### **`build.gradle`**
 ```gradle
-    implementation('org.mariab.jdbc::mariadb-java-client:2.1.2')
+    implementation('org.mariadb.jdbc:mariadb-java-client:2.1.2')
 ```
 
 #### **`application.properties`**
@@ -1095,6 +1095,6 @@ public class PostsResponseDto {
 ## MariaDB
 spring.datasource.driverClassName=org.mariadb.jdbc.Driver
 spring.datasource.url=jdbc:mariadb://localhost:3306/mykb?useUnicode=true&characterEncoding=utf-8
-spring.datasource.username=mykb
-spring.datasource.password=1111
+spring.datasource.username=root
+spring.datasource.password=
 ```
