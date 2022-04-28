@@ -1,0 +1,58 @@
+<!-- layout/posts-show.mustache -->
+{{>layout/header}}
+
+<div class="row">
+    <div class="col">
+        <h5 class="text-primary">
+            <span class="material-icons">edit</span> 글내용 보기
+        </h5>
+    </div>
+</div>
+
+<input type="hidden" id="id" value="{{posts.id}}">
+
+<div class="row">
+    <div class="col-2 d-none col-md-2 d-md-block colLine">
+        제목
+    </div>
+    <div class="col colLine fw-bold">
+        {{posts.title}}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-2 d-none col-md-2 d-md-block colLine">
+        작성자
+    </div>
+    <div class="col colLine fw-bold">
+        {{posts.author}}
+    </div>
+    <div class="col-3 colLine text-end">
+        읽음 : <span class="fw-bold"> {{posts.view}} </span>
+        추천 : <span class="fw-bold" id="idRec"> {{posts.rec}} </span>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-2 d-none col-md-2 d-md-block colLine">
+        내용
+    </div>
+    <div class="col colLine">
+        {{posts.content}}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col colLine text-center">
+        <button type="button" id="btnxxxx" class="btn btn-primary" onClick="location.href='/posts/update/{{posts.id}}'">수정</button>
+        <button type="button" id="btn-delete" class="btn btn-primary">삭제</button>
+        <button type="button" id="btn-rec" class="btn btn-success" onclick="location.href='/posts/rec/{{posts.id}}'">추천</button>
+        <button type="button" id="btn-list" class="btn btn-primary" onClick="location.href='/' ">목록</button>
+    </div>
+</div>
+
+
+<script src="/js/app/index.js"></script>
+
+
+{{>layout/footer}}

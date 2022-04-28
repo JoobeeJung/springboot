@@ -1,0 +1,59 @@
+<!-- layout/posts-print-write.mustache -->
+{{>layout/header}}
+
+<div class="row">
+    <div class="col">
+        <h5 class="text-primary">
+            <span class="material-icons">edit</span> 글수정하기
+        </h5>
+    </div>
+    <form>
+        <div class="row">
+            <div class="col-2 d-none col-md-2 d-md-block colLine">
+                글번호
+            </div>
+            <div class="col colLine">
+                <input type="text" name="id" id="id" value="{{posts.id}}" class="form-control" readonly>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2 d-none col-md-2 d-md-block colLine">
+                제목
+            </div>
+            <div class="col colLine">
+                <input type="text" name="title" id="title" value="{{posts.title}}" class="form-control" required placeholder="제목 입력">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2 d-none col-md-2 d-md-block colLine">
+                작성자
+            </div>
+            <div class="col colLine">
+                <input type="text" name="author" id="author" value="{{posts.author}}" readonly class="form-control" required placeholder="작성자">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-2 d-none col-md-2 d-md-block colLine">
+                내용
+            </div>
+            <div class="col colLine">
+                <textarea name="content" id="content" class="form-control" rows="15" placeholder="내용을 입력하세요">{{posts.content}}</textarea>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col colLine text-center">
+                <button type="button" id="btn-update" class="btn btn-outline-success" onClick="location.href='/'">변경완료</button>
+                <button type="button" class="btn btn-primary" onClick="location.href='/'">목록</button>
+
+            </div>
+        </div>
+
+    </form>
+
+</div>
+
+<script src="/js/app/index.js"></script>
+
+{{>layout/footer}}

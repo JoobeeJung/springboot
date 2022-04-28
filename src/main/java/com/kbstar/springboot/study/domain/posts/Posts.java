@@ -1,6 +1,7 @@
 package com.kbstar.springboot.study.domain.posts;
 
 import com.fasterxml.jackson.annotation.JsonTypeId;
+import com.kbstar.springboot.study.domain.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,10 +28,16 @@ import javax.persistence.*;
 ==> 할 일 : 저장소를 위한 PostsRepository 생성해야 한다.
             class : PostsRepository.java
  */
+
+/*
+    31: JPA Auditing을 위해서 BaseTimeEntity클래스를 상속받는다.
+    Application.java 시작하는 부분에
+        JPA Auditing 어노테이션을 활성화시키는 어노테이션 추가
+ */
 @Getter
 @NoArgsConstructor
 @Entity
-public class Posts {
+public class Posts extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,7 +49,15 @@ public class Posts {
     @Column(columnDefinition = "TEXT", nullable=false)
     private String content;
 
+    @Column(length = 100, nullable=false)
     private String author;
+
+    // 40. view, rec에 대한 컬럼 만들기
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private int view;
+
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private int rec;
 
     // 복제생성자, Copy Constructor
     @Builder

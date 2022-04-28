@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -81,4 +82,26 @@ public class PostsRepositoryTest {
         assertThat(posts.getContent()).isEqualTo(content);
 
     }
+
+    @Test
+    public void baseTimeEntityTest()
+    {
+        LocalDateTime now = LocalDateTime.of(2022, 4, 25, 0, 0, 0);
+        postsRepository.save( Posts.builder().title("kb title").content("kb content").author("user@kbstar.com").build());
+
+        List<Posts> postsList = postsRepository.findAll();
+        Posts posts = postsList.get(0);
+
+        System.out.println("-------------------- createDate : " + posts.getCreateDate());
+        System.out.println("-------------------- modifiedDate : " + posts.getModifiedDate());
+
+        assertThat(posts.getTitle()).isEqualTo("kb title");
+        assertThat(posts.getContent()).isEqualTo("kb content");
+        // 날짜 확인
+        // 날짜 type 을 localTimeDate -> String으로 변했기 떄문에 주석
+//        assertThat(posts.getCreateDate()).isAfter(now);
+//        assertThat(posts.getModifiedDate()).isAfter(now);
+
+    }
+
 }

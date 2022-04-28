@@ -1,0 +1,124 @@
+/*
+    css/style.css 주석달기 : 자바 멀티라인 주석
+    선택자(Selector)
+    태그 : li, body
+    클래스 : .className
+    아이디 : #idName
+*/
+
+html, body {
+    max-width:100%;
+}
+
+body
+{
+
+}
+
+.ellipsis {
+    white-space: nowrap;
+    overflow:hidden;
+    text-overflow: ellipsis;
+    width:100px;
+}
+
+.row {line-height:200%; min-width:100%; min-height:30px; height:auto; padding-top:5px; border:0px solid #FFFFFF;}
+.colLine { line-height:200%; min-height:30px; border-bottom:1px dotted #DDDDDD; padding-top:4px; padding-bottom:4px;}
+.icon { vertical-align:text-bottom; }
+
+table {
+    border-collapse: collapse;
+}
+
+.mycheckbox {
+    width:30px;
+    height:30px;
+}
+
+a:link { text-decoration:none; color: #333333; }
+a:hover { text-decoration:none; color: #FF0000; }
+a:visited { text-decoration:none; color: #333333; }
+
+.team {
+    font-weight:bold;
+    color:#0000FF;
+    background-color:#FFFF00;
+}
+.man {
+    /*font-weight:bold;*/
+    color:#0000FF;
+    background-color:#FF00FF;
+}
+
+p {
+    line-height:200%;
+    font-size:20px;
+}
+
+.paragraph {
+    line-height:180%;
+    font-size:14px;
+    margin:20px;
+    padding:0px 20px 30px 40px;
+    border:2px dotted #FF0000;
+    text-align:justify;
+}
+
+.kbstarbg {
+    background-color:#eaf8f4;
+}
+
+li {
+
+    /*
+    list-style-type: square;
+    list-style-image: url('img/kbstar.gif');
+    */
+}
+
+#redbox {
+    border:2px solid #FF0000;
+    border-radius:7px;
+}
+
+.test1 {
+    font-weight:bold;
+}
+
+.test2 {
+    font-family: 궁서;
+}
+
+h1 {
+    background-color:rgba(255, 0, 0, 0.5);
+    border-radius:0px 10px 20px 30px;
+}
+
+#aaa{
+    background-color:#FFFF00;
+    float:left;
+    width:300px;
+}
+#bbb{
+    background-color:#FF0000;
+    margin-left:20px;
+    float:right;
+    width:200px;
+    height:300px;
+
+}
+#ccc{
+    background-color:#00FF00;
+    position:absolute;
+    top:400px;
+    left:500px;
+}
+#ddd{
+    background-color:#0000FF;
+}
+#eee{
+    background-color:#FF00FF;
+}
+#fff{
+    background-color:#00FFFF;
+}

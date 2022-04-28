@@ -3,6 +3,8 @@ package com.kbstar.springboot.study.web.dto;
 import com.kbstar.springboot.study.domain.posts.Posts;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 /*
     23.. Request에 대한 응답 데이터 만들기
 
@@ -21,6 +23,9 @@ public class PostsResponseDto {
     private String title;
     private String content;
     private String author;
+    private int view;
+    private int rec;
+    // 41. DTO에 추가하기
 
     public PostsResponseDto(Posts entity)
     {
@@ -28,5 +33,7 @@ public class PostsResponseDto {
         this.title = entity.getTitle();
         this.content = entity.getContent();
         this.author = entity.getAuthor();
+        this.view = entity.getView();
+        this.rec = entity.getRec();
     }
 }

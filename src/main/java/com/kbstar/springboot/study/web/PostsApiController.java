@@ -26,11 +26,6 @@ import org.springframework.web.bind.annotation.*;
         <textarea name="content"></textarea>
         <button type="submit">저장</button>
     </form>
-
-
-
-
-
  */
 @RequiredArgsConstructor
 @RestController
@@ -58,9 +53,18 @@ public class PostsApiController {
     {
         return postsService.update(id, requestDto);
     }
+
+    @DeleteMapping("/api/v1/posts/{id}")
+    public Long delete(@PathVariable Long id)
+    {
+        postsService.delete(id);
+        return id;
+    }
+
     @GetMapping("/api/v1/posts/{id}")
     public PostsResponseDto findById(@PathVariable Long id)
     {
+
         return postsService.findById(id);
     }
 

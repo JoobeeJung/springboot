@@ -1,0 +1,30 @@
+1. 복사, 삭제,
+        yy : copy
+        3yy
+
+        dd : delete
+        x  : delete char
+2. find
+        /
+
+        /ab
+                n  : next word
+                N  : prev word
+
+3. move
+        :line
+                :3
+                :$
+
+        $       : last pos of current line
+        ^       : first pos of current line
+4. insert
+        i : before cursor
+        a : after cursor
+        o : next line of cursor
+
+5. Shift-J  : 다음줄을 현재줄에 붙이기
+
+6. file 이동
+        :e test.txt     <- move to test.txt
+        :e #            <- move to prev page
