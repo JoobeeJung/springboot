@@ -1207,3 +1207,341 @@ public class User extends BaseTimeEntity {
 
 ```
 
+======================
+
+## 게시판 조회수 및 추천 수 counting 기능
+
+### 40. view, rec에 대한 컬럼 생성
+
+    
+#### **`Posts.java`**
+```java
+package com.kbstar.springboot.study.domain.posts;
+
+import com.fasterxml.jackson.annotation.JsonTypeId;
+import com.kbstar.springboot.study.domain.BaseTimeEntity;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+
+
+/*
+13. 게시글 관련 클래스 정의
+    <form method='post' enctype='multipart/form-data' action='a.jsp'>
+        <input type='file' name='upfile'>
+    </form>
+
+@Entity : JPA에서 필요한 annotation
+    테이블과 클래스를 매핑해준다.
+    Posts.java  -> posts 데이터베이스 테이블 매핑
+    MyPosts.java -> my_post 테이블을 만든다.
+        myFamilyCount (O)
+        my_family_count (X)
+@Id : 데이터베이스의 키 값
+@GeneratedValue : 키 생성
+@Column : 데이터베이스 테이블을 내부적을 생성해줄 때 사이즈 등을 설정
+
+==> 할 일 : 저장소를 위한 PostsRepository 생성해야 한다.
+            class : PostsRepository.java
+ */
+
+/*
+    31: JPA Auditing을 위해서 BaseTimeEntity클래스를 상속받는다.
+    Application.java 시작하는 부분에
+        JPA Auditing 어노테이션을 활성화시키는 어노테이션 추가
+ */
+@Getter
+@NoArgsConstructor
+@Entity
+public class Posts extends BaseTimeEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(length = 500, nullable = false)
+    private String title;
+
+    @Column(columnDefinition = "TEXT", nullable=false)
+    private String content;
+
+    @Column(length = 100, nullable=false)
+    private String author;
+
+    // 40. view, rec에 대한 컬럼 만들기
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private int view;
+
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private int rec;
+
+    // 복제생성자, Copy Constructor
+    @Builder
+    public Posts(String title, String content, String author)
+    {
+        this.title = title;
+        this.content = content;
+        this.author = author;
+    }
+
+    /*
+    24. 데이터 지속성(Consistent : 객체와 Entity의 일치)
+        객체가 업데이트 되면 자동으로 DB데이터가 변경
+
+        실제 DB에 업데이트되도록 만들기.
+        DTO 작업끝났다. ----> Service로 가서 작업
+     */
+
+    public void update(String title, String content)
+    {
+        this.title = title;
+        this.content = content;
+    }
+}
+```
+
+### 41. DTO에 해당 컬럼 추가하기
+
+    
+#### **`PostsResponseDto.java`**
+```java
+package com.kbstar.springboot.study.web.dto;
+
+import com.kbstar.springboot.study.domain.posts.Posts;
+import lombok.Getter;
+
+import java.time.LocalDateTime;
+
+/*
+    23.. Request에 대한 응답 데이터 만들기
+
+          1
+                 Dto(4)
+          2
+                Entity(5)
+          3
+
+          5를 이용해 4번을 만들기
+ */
+
+@Getter
+public class PostsResponseDto {
+    private Long id;
+    private String title;
+    private String content;
+    private String author;
+    private int view;
+    private int rec;
+    // 41. DTO에 추가하기
+
+    public PostsResponseDto(Posts entity)
+    {
+        this.id = entity.getId();
+        this.title = entity.getTitle();
+        this.content = entity.getContent();
+        this.author = entity.getAuthor();
+        this.view = entity.getView();
+        this.rec = entity.getRec();
+    }
+}
+```
+
+#### **`PostsListResponseDto.java`**
+```java
+package com.kbstar.springboot.study.web.dto;
+
+import com.kbstar.springboot.study.domain.posts.Posts;
+import lombok.Getter;
+
+import java.time.LocalDateTime;
+
+@Getter
+public class PostsListResponseDto {
+    private Long id;
+    private String title;
+    //private String content;
+    private String author;
+    private int view;
+    private int rec;
+    //private LocalDateTime modifiedDate;
+    private String modifiedDate;
+
+    public PostsListResponseDto(Posts entity)
+    {
+        this.id = entity.getId();
+        this.title = entity.getTitle();
+        this.author = entity.getAuthor();
+        this.modifiedDate = entity.getModifiedDate();
+        this.view = entity.getView();
+        this.rec = entity.getRec();
+    }
+}
+```
+
+### 42. Repository에 쿼리 추가
+    
+#### **`PostsRepository.java`**
+```java
+package com.kbstar.springboot.study.domain.posts;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
+
+/*
+14. 저장소를 위한 interface
+Posts 클래스로 부터 DB 접근이 가능하게 해 줄 JpaRepository
+MyBatis : DAO : Data Access Object
+        cf. DTO : Data Transfer Object
+
+        JpaRepository<클래스, PrimaryKey>
+        이 녀석을 상속받기만 하면 CRUD 메소드 자동생성
+
+        Entity 클래스 = Posts
+        Entity Repository = PostsRepository
+        이 둘은 같은 위치에 있어야 한다.
+
+        할 일 : 저장소 처리가 잘 되는 지 확인 ==> 단위테스트트
+ */
+public interface PostsRepository  extends JpaRepository<Posts, Long> {
+    @Query("SELECT p FROM Posts p ORDER BY p.id DESC")
+    List<Posts> findAllDesc();
+
+    @Modifying //데이터에 영향을 미치는 쿼리(insert, update delete) java의 excute update 와 같은 역할
+    @Query("UPDATE Posts p SET p.view = p.view + 1 WHERE p.id = :id")
+    int updateView(Long id);
+
+    @Modifying //데이터에 영향을 미치는 쿼리(insert, update delete) java의 excute update 와 같은 역할
+    @Query("UPDATE Posts p SET p.rec = p.rec + 1 WHERE p.id = :id")
+    int updateRec(Long id);
+}
+
+/*
+    여기서 사용하는 쿼리는 RDB와 약간 차이가 있다. JPQL
+ */
+```
+
+### 43. Repository에 쿼리 추가
+    
+#### **`PostsService.java`**
+```java
+package com.kbstar.springboot.study.service;
+
+import com.kbstar.springboot.study.domain.posts.Posts;
+import com.kbstar.springboot.study.domain.posts.PostsRepository;
+import com.kbstar.springboot.study.web.dto.PostsListResponseDto;
+import com.kbstar.springboot.study.web.dto.PostsResponseDto;
+import com.kbstar.springboot.study.web.dto.PostsSaveRequestDto;
+import com.kbstar.springboot.study.web.dto.PostsUpdateRequestDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+
+/*
+    19. Service 등록
+
+    자동으로 만들어지는 생성
+
+    public PostsService(PostsRepository postsRepository)
+    {
+        this.postsRepository=postsRepository;
+    }
+
+    Transaction : All or Nothing
+ */
+@RequiredArgsConstructor
+@Service
+public class PostsService {
+    private final PostsRepository postsRepository;
+
+    @Transactional
+    public Long save(PostsSaveRequestDto requestDto)
+    {
+        System.out.println("------------------ Post Service");
+        System.out.println("title = " + requestDto.getTitle());
+        System.out.println("content = " + requestDto.getContent());
+        System.out.println("author = " + requestDto.getAuthor());
+        return postsRepository.save(requestDto.toEntity()).getId();
+    }
+
+    /*
+        25. 업데이트를 위한 매핑 (객체랑 DB)
+
+        등록 : /api/v1/posts    <--- 새글 등록록
+       수정 : /api/v1/posts/3  <--- 3번글을 수정해
+
+       1. DTO --> Service --> Controller
+     */
+    @Transactional
+    public Long update(Long id, PostsUpdateRequestDto requestDto )
+    {
+        Posts posts = postsRepository.findById(id).orElseThrow(
+                ()-> new IllegalArgumentException("No id for Post indById(id).o: " + id)
+        );
+
+        posts.update(requestDto.getTitle(), requestDto.getContent());
+
+        return id;
+    }
+    //43. view, rec에 해당하는 업데이트 트랜젝션 추가
+    @Transactional
+    public int updateView(Long id)
+    {
+        return postsRepository.updateView(id);
+    }
+
+    @Transactional
+    public int updateRec(Long id)
+    {
+        return postsRepository.updateRec(id);
+    }
+
+    @Transactional
+    public Long delete(Long id)
+    {
+        Posts posts = postsRepository.findById(id).orElseThrow(
+                ()-> new IllegalArgumentException("No id for Post indById(id).o: " + id)
+        );
+
+        postsRepository.delete(posts);
+
+        return id;
+    }
+
+
+
+    public PostsResponseDto findById(Long id)
+    {
+        Posts posts = postsRepository.findById(id).orElseThrow(
+                ()-> new IllegalArgumentException("No id for Post idById(id).o: " + id)
+        );
+
+        return new PostsResponseDto(posts);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PostsListResponseDto> findAllDesc()
+    {
+        return postsRepository
+                .findAllDesc()
+                .stream()
+                .map(PostsListResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
+    /*
+    .map(PostListResponseDto::new)
+    = .map(posts->new PostListResponseDto(posts))
+     */
+
+}
+```
