@@ -1207,6 +1207,26 @@ public class User extends BaseTimeEntity {
 
 ```
 
+
+### 37. UserRepository 생성
+
+    domain 아래 user 패키지 아래 레포지토리 생성
+#### **`UserRepository.java`**
+```java
+```
+
+
+### 38. build.gradle 수정
+
+#### **`build.gradle`**
+```yaml
+
+    //OAuth
+    implementation('org.springframework.boot:spring-boot-starter-oauth2-client')
+    implementation('org.springframework.session:spring-session-jdbc')
+    testImplementation('org.springframework.security:spring-security-test')
+```
+
 ======================
 
 ## 게시판 조회수 및 추천 수 counting 기능
